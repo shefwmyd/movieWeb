@@ -1,13 +1,13 @@
 const express = require("express");
 const cors = require("cors");
 const pool = require("./db");
-const path = require("path");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+// This get will search movies by title, release_date, genre and type
 app.get("/search", async (req, res) => {
   try {
     const { title, release_date, genre, type } = req.query;
@@ -31,7 +31,7 @@ app.get("/movies", async (req, res) => {
   try {
     const { type } = req.query;
     const moviesResult = await pool.query(
-      "SELECT * FROM entertainment WHERE TRIM(type) = $1",
+      "SELECT * FROM entertainment WHERE type = $1",
       [type]
     );
 
@@ -46,6 +46,7 @@ app.get("/movies", async (req, res) => {
   }
 });
 
+// This Post will insert new movies
 app.post("/movies", async (req, res) => {
   try {
     const { title, release_date, genre, type } = req.body;
@@ -64,6 +65,7 @@ app.post("/movies", async (req, res) => {
   }
 });
 
+// This put endpoint will update the existing movie
 app.put("/movies/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -73,7 +75,7 @@ app.put("/movies/:id", async (req, res) => {
       [title, release_date, genre, type, id]
     );
 
-    if (updatedMovie.rowsCount === 0) {
+    if (updatedMovie.rowCount === 0) {
       return res.status(404).json({ message: "Movie not updated" });
     }
     res.status(200).json({ updatedMovie });
@@ -83,6 +85,7 @@ app.put("/movies/:id", async (req, res) => {
   }
 });
 
+// This delete endpoint will delete movie from entertainment table by the id
 app.delete("/movies/:id", async (req, res) => {
   try {
     const { id } = req.params;
