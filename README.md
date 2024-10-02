@@ -20,3 +20,13 @@ and I create a entertainment table
 with the column of id, title, release date, genre and type
 on entertainment table there is 10 type of Movies, 10 type of Tv series and 10 type of Tv show
 30 rows total.
+
+CREATE TABLE IF NOT EXISTS public.entertainment
+(
+    id integer NOT NULL DEFAULT nextval('entertainment_id_seq'::regclass),
+    title character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    release_date date NOT NULL,
+    genre character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    type character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT entertainment_pkey PRIMARY KEY (id)
+)
